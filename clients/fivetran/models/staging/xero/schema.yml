@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: stg_xero_invoices
+    description: "Staged Xero invoices with basic cleanup and type casting"
+    columns:
+      - name: invoice_id
+        description: "Unique identifier for the invoice"
+        tests:
+          - unique
+          - not_null
+      - name: invoice_number
+        description: "Human-readable invoice number"
+      - name: contact_id
+        description: "Reference to the customer or supplier"
+      - name: invoice_type
+        description: "Type of invoice (ACCREC for sales, ACCPAY for purchases)"
+      - name: invoice_status
+        description: "Current status of the invoice"
+      - name: invoice_date
+        description: "Date the invoice was issued"
+      - name: due_date
+        description: "Payment due date"
+      - name: total_amount
+        description: "Total invoice amount including tax"
+      - name: subtotal_amount
+        description: "Invoice subtotal before tax"
+      - name: tax_amount
+        description: "Total tax amount"
+      - name: currency_code
+        description: "Currency code (standardized to uppercase)"
+      - name: last_synced_at
+        description: "Timestamp of last Fivetran sync"
+
+  - name: stg_xero_line_items
+    description: "Staged line items from Xero invoices"
+    columns:
+      - name: line_item_id
+        description: "Unique identifier for the line item"
+        tests:
+          - not_null
+      - name: invoice_id
+        description: "Reference to parent invoice"
+        tests:
+          - not_null
+      - name: description
+        description: "Line item description"
+      - name: quantity
+        description: "Quantity of items"
+      - name: unit_price
+        description: "Price per unit"
+      - name: line_total
+        description: "Total amount for the line"
+      - name: account_code
+        description: "GL account code"
+      - name: tax_type
+        description: "Tax type applied to the line"
+
+  - name: stg_xero_contacts
+    description: "Staged Xero contacts (customers and suppliers)"
+    columns:
+      - name: contact_id
+        description: "Unique identifier for the contact"
+        tests:
+          - unique
+          - not_null
+      - name: contact_name
+        description: "Name of the contact"
+      - name: email
+        description: "Email address (lowercase)"
+      - name: status
+        description: "Contact status (filtered to ACTIVE only)"
+      - name: is_customer
+        description: "Flag indicating if contact is a customer"
+      - name: is_supplier
+        description: "Flag indicating if contact is a supplier"
+
+  - name: stg_xero_items
+    description: "Staged inventory items from Xero"
+    columns:
+      - name: item_id
+        description: "Unique identifier for the item"
+        tests:
+          - unique
+          - not_null
+      - name: item_code
+        description: "Item code/SKU"
+      - name: item_name
+        description: "Name of the item"
+      - name: item_description
+        description: "Description of the item"
+      - name: unit_price
+        description: "Default selling price"

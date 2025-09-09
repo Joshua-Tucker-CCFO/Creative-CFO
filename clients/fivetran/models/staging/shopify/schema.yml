@@ -1,0 +1,125 @@
+version: 2
+
+models:
+  - name: stg_shopify_orders
+    description: "Staged orders from Shopify e-commerce platform"
+    columns:
+      - name: order_id
+        description: "Unique identifier for the order"
+        tests:
+          - unique
+          - not_null
+      - name: order_number
+        description: "Order number displayed to customers"
+      - name: customer_id
+        description: "Reference to the customer"
+      - name: created_at
+        description: "When the order was created"
+      - name: processed_at
+        description: "When the order was processed"
+      - name: cancelled_at
+        description: "When the order was cancelled (if applicable)"
+      - name: financial_status
+        description: "Payment status of the order"
+      - name: fulfillment_status
+        description: "Shipping/fulfillment status"
+      - name: total_amount
+        description: "Total order amount including tax and shipping"
+      - name: subtotal_amount
+        description: "Order subtotal before tax and shipping"
+      - name: tax_amount
+        description: "Total tax amount"
+      - name: shipping_amount
+        description: "Total shipping cost"
+      - name: currency_code
+        description: "Currency code (standardized to uppercase)"
+      - name: is_cancelled
+        description: "Flag indicating if order was cancelled"
+
+  - name: stg_shopify_order_lines
+    description: "Staged line items from Shopify orders"
+    columns:
+      - name: line_id
+        description: "Unique identifier for the line item"
+        tests:
+          - not_null
+      - name: order_id
+        description: "Reference to parent order"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Reference to the product"
+      - name: variant_id
+        description: "Reference to product variant"
+      - name: product_title
+        description: "Name of the product"
+      - name: variant_title
+        description: "Name of the variant"
+      - name: sku
+        description: "Stock keeping unit"
+      - name: quantity
+        description: "Quantity ordered"
+      - name: unit_price
+        description: "Price per unit"
+      - name: gross_amount
+        description: "Total before discounts"
+      - name: discount_amount
+        description: "Total discount applied"
+      - name: net_amount
+        description: "Final amount after discounts"
+
+  - name: stg_shopify_customers
+    description: "Staged customer data from Shopify"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        description: "Email address (lowercase)"
+      - name: first_name
+        description: "Customer first name"
+      - name: last_name
+        description: "Customer last name"
+      - name: full_name
+        description: "Concatenated full name"
+      - name: phone
+        description: "Phone number"
+      - name: created_at
+        description: "When customer was created"
+      - name: updated_at
+        description: "When customer was last updated"
+      - name: total_orders
+        description: "Total number of orders placed"
+      - name: lifetime_value
+        description: "Total amount spent by customer"
+      - name: customer_state
+        description: "Customer state (filtered to enabled only)"
+
+  - name: stg_shopify_products
+    description: "Staged product catalog from Shopify"
+    columns:
+      - name: product_id
+        description: "Unique identifier for the product"
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Name of the product"
+      - name: vendor
+        description: "Product vendor/brand"
+      - name: product_type
+        description: "Product category/type"
+      - name: url_handle
+        description: "URL-friendly product identifier"
+      - name: created_at
+        description: "When product was created"
+      - name: updated_at
+        description: "When product was last updated"
+      - name: published_at
+        description: "When product was published"
+      - name: product_status
+        description: "Product status (active, archived, draft)"
+      - name: is_active
+        description: "Flag indicating if product is active"

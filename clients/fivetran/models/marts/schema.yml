@@ -1,0 +1,148 @@
+version: 2
+
+models:
+  - name: fct_daily_sales
+    description: "Daily sales fact table optimized for Power BI reporting"
+    columns:
+      - name: sale_date
+        description: "Date of sales"
+        tests:
+          - not_null
+      - name: source_system
+        description: "System where sales originated"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Xero', 'Cin7', 'Shopify']
+      - name: currency_code
+        description: "Currency of transactions"
+      - name: sale_year
+        description: "Year of sale"
+      - name: sale_quarter
+        description: "Quarter of sale (1-4)"
+      - name: sale_month
+        description: "Month of sale (1-12)"
+      - name: sale_week
+        description: "Week of year"
+      - name: year_month
+        description: "Year-month for period reporting"
+      - name: day_of_week
+        description: "Day name (Monday-Sunday)"
+      - name: day_of_month
+        description: "Day of month (1-31)"
+      - name: fiscal_half
+        description: "Fiscal half year (H1/H2)"
+      - name: total_transactions
+        description: "Count of transactions"
+      - name: unique_customers
+        description: "Count of unique customers"
+      - name: gross_revenue
+        description: "Revenue before tax and shipping"
+      - name: total_tax
+        description: "Total tax collected"
+      - name: total_shipping
+        description: "Total shipping charges"
+      - name: net_revenue
+        description: "Total revenue including tax and shipping"
+      - name: avg_transaction_value
+        description: "Average transaction amount"
+      - name: min_transaction_value
+        description: "Smallest transaction amount"
+      - name: max_transaction_value
+        description: "Largest transaction amount"
+      - name: paid_transactions
+        description: "Count of paid/completed transactions"
+      - name: pending_transactions
+        description: "Count of pending transactions"
+      - name: payment_completion_rate
+        description: "Percentage of transactions paid"
+      - name: effective_tax_rate
+        description: "Tax as percentage of gross revenue"
+      - name: last_updated_at
+        description: "Last data sync timestamp"
+      - name: report_generated_at
+        description: "When this report row was generated"
+
+  - name: dim_customers
+    description: "Customer dimension with enriched attributes for BI reporting"
+    columns:
+      - name: unique_customer_key
+        description: "Unique identifier across all systems"
+        tests:
+          - unique
+          - not_null
+      - name: source_system
+        description: "Original system of record"
+      - name: source_customer_id
+        description: "Customer ID in source system"
+      - name: customer_name
+        description: "Customer name"
+      - name: email
+        description: "Customer email address"
+      - name: phone
+        description: "Customer phone"
+      - name: lifetime_value
+        description: "Total customer spend to date"
+      - name: total_orders
+        description: "Total number of orders"
+      - name: first_order_date
+        description: "Date of first purchase"
+      - name: last_order_date
+        description: "Date of most recent purchase"
+      - name: avg_order_value
+        description: "Average order amount"
+      - name: customer_segment
+        description: "Value-based segmentation (VIP, High, Medium, Low)"
+      - name: customer_status
+        description: "Activity status (Active, At Risk, Dormant, Churned)"
+      - name: days_since_last_order
+        description: "Days since last purchase"
+      - name: customer_lifetime_days
+        description: "Days between first and last order"
+      - name: has_email
+        description: "Flag for email presence"
+      - name: has_phone
+        description: "Flag for phone presence"
+
+  - name: dim_products
+    description: "Product dimension with categorization and profitability metrics"
+    columns:
+      - name: unique_product_key
+        description: "Unique identifier across all systems"
+        tests:
+          - unique
+          - not_null
+      - name: source_system
+        description: "Original system of record"
+      - name: source_product_id
+        description: "Product ID in source system"
+      - name: sku
+        description: "Stock keeping unit"
+      - name: product_name
+        description: "Product name"
+      - name: product_description
+        description: "Product description"
+      - name: product_category
+        description: "Product category (with default for null)"
+      - name: selling_price
+        description: "Current selling price"
+      - name: cost_price
+        description: "Product cost"
+      - name: gross_margin_amount
+        description: "Margin in currency"
+      - name: gross_margin_percent
+        description: "Margin percentage"
+      - name: price_tier
+        description: "Price classification (Premium, Mid-Range, Standard, Budget)"
+      - name: current_stock
+        description: "Current inventory level"
+      - name: stock_status
+        description: "Stock level classification"
+      - name: margin_classification
+        description: "Profitability classification"
+      - name: has_sku
+        description: "Flag for SKU presence"
+      - name: has_price
+        description: "Flag for valid price"
+      - name: has_category
+        description: "Flag for category assignment"

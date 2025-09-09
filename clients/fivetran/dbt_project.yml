@@ -1,0 +1,36 @@
+name: 'fivetran_azure_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'fivetran_azure'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["data"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  fivetran_azure_project:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+      +indexes: []
+
+vars:
+  fivetran_database: 'OldSchool-Dev-DB'
+  fivetran_schema: 'fivetran'
+
+dbt-cloud:
+  project-id: 70471823501225

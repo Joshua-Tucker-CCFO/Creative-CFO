@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: int_sales_transactions
+    description: "Unified sales transactions from all three sources (Xero, Cin7, Shopify)"
+    columns:
+      - name: source_system
+        description: "System where the transaction originated"
+        tests:
+          - accepted_values:
+              values: ['Xero', 'Cin7', 'Shopify']
+      - name: transaction_id
+        description: "Unique identifier for the transaction within source system"
+        tests:
+          - not_null
+      - name: transaction_number
+        description: "Human-readable transaction number"
+      - name: customer_id
+        description: "Reference to customer in source system"
+      - name: transaction_date
+        description: "Date of the transaction"
+        tests:
+          - not_null
+      - name: transaction_type
+        description: "Type of transaction"
+      - name: status
+        description: "Current transaction status"
+      - name: currency_code
+        description: "Currency code"
+      - name: subtotal_amount
+        description: "Subtotal before tax and shipping"
+      - name: tax_amount
+        description: "Total tax amount"
+      - name: shipping_amount
+        description: "Shipping cost (Shopify only)"
+      - name: total_amount
+        description: "Total transaction amount"
+      - name: transaction_year
+        description: "Year of transaction"
+      - name: transaction_quarter
+        description: "Quarter of transaction"
+      - name: transaction_month
+        description: "Month of transaction"
+      - name: transaction_week
+        description: "Week of transaction"
+      - name: year_month
+        description: "Year-month for reporting"
+
+  - name: int_unified_customers
+    description: "Deduplicated customer records across all systems"
+    columns:
+      - name: unique_customer_key
+        description: "Unique key combining source system and customer ID"
+        tests:
+          - unique
+          - not_null
+      - name: source_system
+        description: "System where customer record originated"
+      - name: customer_id
+        description: "Customer ID in source system"
+      - name: customer_name
+        description: "Customer name"
+      - name: email
+        description: "Customer email (deduplicated across systems)"
+      - name: phone
+        description: "Customer phone number"
+      - name: lifetime_value
+        description: "Total customer spend (from source or calculated)"
+      - name: total_orders
+        description: "Number of orders placed"
+
+  - name: int_unified_products
+    description: "Unified product catalog across all systems"
+    columns:
+      - name: unique_product_key
+        description: "Unique key combining source system and product ID"
+        tests:
+          - unique
+          - not_null
+      - name: source_system
+        description: "System where product record originated"
+      - name: product_id
+        description: "Product ID in source system"
+      - name: sku
+        description: "Stock keeping unit"
+      - name: product_name
+        description: "Product name"
+      - name: product_description
+        description: "Product description"
+      - name: product_category
+        description: "Product category"
+      - name: selling_price
+        description: "Retail selling price"
+      - name: cost_price
+        description: "Cost of goods"
+      - name: stock_on_hand
+        description: "Current inventory level"
+      - name: gross_margin_amount
+        description: "Gross margin in currency"
+      - name: gross_margin_percent
+        description: "Gross margin percentage"

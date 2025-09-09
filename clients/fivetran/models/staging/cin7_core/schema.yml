@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: stg_cin7_sales_orders
+    description: "Staged sales orders from Cin7 Core inventory management system"
+    columns:
+      - name: sales_order_id
+        description: "Unique identifier for the sales order"
+        tests:
+          - unique
+          - not_null
+      - name: order_number
+        description: "Human-readable order number"
+      - name: customer_id
+        description: "Reference to the customer"
+      - name: order_status
+        description: "Current status of the order"
+      - name: order_date
+        description: "Date the order was placed"
+      - name: total_amount
+        description: "Total order amount including tax"
+      - name: subtotal_amount
+        description: "Order subtotal before tax"
+      - name: tax_amount
+        description: "Total tax amount"
+      - name: currency_code
+        description: "Currency code (standardized to uppercase)"
+      - name: last_synced_at
+        description: "Timestamp of last Fivetran sync"
+
+  - name: stg_cin7_sales_order_lines
+    description: "Staged line items from Cin7 sales orders"
+    columns:
+      - name: line_id
+        description: "Unique identifier for the line item"
+        tests:
+          - not_null
+      - name: sales_order_id
+        description: "Reference to parent sales order"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Reference to the product"
+      - name: quantity
+        description: "Quantity ordered"
+      - name: unit_price
+        description: "Price per unit"
+      - name: line_total
+        description: "Total amount for the line"
+      - name: discount_percent
+        description: "Discount percentage applied"
+      - name: effective_unit_price
+        description: "Calculated effective price after discounts"
+
+  - name: stg_cin7_products
+    description: "Staged product catalog from Cin7 Core"
+    columns:
+      - name: product_id
+        description: "Unique identifier for the product"
+        tests:
+          - unique
+          - not_null
+      - name: sku
+        description: "Stock keeping unit code"
+      - name: product_name
+        description: "Name of the product"
+      - name: product_description
+        description: "Description of the product"
+      - name: product_category
+        description: "Product category"
+      - name: cost_price
+        description: "Cost price of the product"
+      - name: retail_price
+        description: "Retail selling price"
+      - name: stock_on_hand
+        description: "Current stock quantity"
+      - name: gross_margin
+        description: "Gross margin amount (retail - cost)"
+      - name: margin_percent
+        description: "Gross margin percentage"
+
+  - name: stg_cin7_customers
+    description: "Staged customer data from Cin7 Core"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Name of the customer"
+      - name: email
+        description: "Email address (lowercase)"
+      - name: phone
+        description: "Phone number"
+      - name: billing_address
+        description: "Billing address"
+      - name: shipping_address
+        description: "Shipping address"
+      - name: credit_limit
+        description: "Customer credit limit"

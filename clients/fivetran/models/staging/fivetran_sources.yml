@@ -1,0 +1,428 @@
+version: 2
+
+sources:
+  - name: xero
+    database: "{{ var('fivetran_database') }}"
+    schema: xero
+    description: "Raw data from Xero accounting system synced via Fivetran"
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: _fivetran_synced
+    
+    tables:
+      - name: invoices
+        description: "Sales and purchase invoices from Xero"
+        columns:
+          - name: invoice_id
+            description: "Unique identifier for the invoice"
+            tests:
+              - unique
+              - not_null
+          - name: invoice_number
+            description: "Invoice number as displayed in Xero"
+          - name: contact_id
+            description: "Reference to the contact (customer/supplier)"
+          - name: type
+            description: "Invoice type (ACCPAY, ACCREC, etc.)"
+          - name: status
+            description: "Invoice status (DRAFT, SUBMITTED, AUTHORISED, PAID, etc.)"
+          - name: date
+            description: "Invoice date"
+          - name: due_date
+            description: "Payment due date"
+          - name: total
+            description: "Total amount including tax"
+          - name: sub_total
+            description: "Total excluding tax"
+          - name: total_tax
+            description: "Total tax amount"
+          - name: currency_code
+            description: "Currency code (e.g., USD, GBP)"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: line_items
+        description: "Line item details for invoices"
+        columns:
+          - name: line_item_id
+            description: "Unique identifier for the line item"
+          - name: invoice_id
+            description: "Reference to parent invoice"
+          - name: description
+            description: "Line item description"
+          - name: quantity
+            description: "Quantity of items"
+          - name: unit_amount
+            description: "Price per unit"
+          - name: line_amount
+            description: "Total amount for the line"
+          - name: account_code
+            description: "Account code for categorization"
+          - name: tax_type
+            description: "Tax type applied"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+            
+      - name: contacts
+        description: "Customer and supplier contacts from Xero"
+        columns:
+          - name: contact_id
+            description: "Unique identifier for the contact"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "Contact name"
+          - name: email_address
+            description: "Primary email address"
+          - name: contact_status
+            description: "Status of the contact (ACTIVE, ARCHIVED)"
+          - name: is_customer
+            description: "Flag indicating if contact is a customer"
+          - name: is_supplier
+            description: "Flag indicating if contact is a supplier"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: accounts
+        description: "Chart of accounts from Xero"
+        columns:
+          - name: account_id
+            description: "Unique identifier for the account"
+          - name: code
+            description: "Account code"
+          - name: name
+            description: "Account name"
+          - name: type
+            description: "Account type (REVENUE, EXPENSE, etc.)"
+          - name: class
+            description: "Account class"
+          - name: status
+            description: "Account status"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+            
+      - name: items
+        description: "Inventory items from Xero"
+        columns:
+          - name: item_id
+            description: "Unique identifier for the item"
+          - name: code
+            description: "Item code/SKU"
+          - name: name
+            description: "Item name"
+          - name: description
+            description: "Item description"
+          - name: unit_price
+            description: "Default unit price"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+
+  - name: cin7_core
+    database: "{{ var('fivetran_database') }}"
+    schema: cin7_core
+    description: "Raw data from Cin7 Core inventory management system synced via Fivetran"
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: _fivetran_synced
+    
+    tables:
+      - name: sales_orders
+        description: "Sales orders from Cin7 Core"
+        columns:
+          - name: sales_order_id
+            description: "Unique identifier for the sales order"
+            tests:
+              - unique
+              - not_null
+          - name: order_number
+            description: "Sales order number"
+          - name: customer_id
+            description: "Reference to customer"
+          - name: order_date
+            description: "Date of the order"
+          - name: status
+            description: "Order status"
+          - name: total_amount
+            description: "Total order amount including tax"
+          - name: subtotal
+            description: "Order subtotal excluding tax"
+          - name: tax_amount
+            description: "Total tax amount"
+          - name: currency
+            description: "Currency code"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: sales_order_lines
+        description: "Line items for sales orders"
+        columns:
+          - name: line_id
+            description: "Unique identifier for the line item"
+          - name: sales_order_id
+            description: "Reference to parent sales order"
+          - name: product_id
+            description: "Reference to product"
+          - name: quantity
+            description: "Quantity ordered"
+          - name: unit_price
+            description: "Price per unit"
+          - name: line_total
+            description: "Total for the line"
+          - name: discount_percent
+            description: "Discount percentage applied"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+            
+      - name: products
+        description: "Product catalog from Cin7 Core"
+        columns:
+          - name: product_id
+            description: "Unique identifier for the product"
+            tests:
+              - unique
+              - not_null
+          - name: sku
+            description: "Stock keeping unit"
+          - name: name
+            description: "Product name"
+          - name: description
+            description: "Product description"
+          - name: category
+            description: "Product category"
+          - name: cost_price
+            description: "Cost price of the product"
+          - name: retail_price
+            description: "Retail selling price"
+          - name: stock_on_hand
+            description: "Current stock quantity"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: customers
+        description: "Customer data from Cin7 Core"
+        columns:
+          - name: customer_id
+            description: "Unique identifier for the customer"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "Customer name"
+          - name: email
+            description: "Customer email"
+          - name: phone
+            description: "Customer phone"
+          - name: billing_address
+            description: "Billing address"
+          - name: shipping_address
+            description: "Shipping address"
+          - name: credit_limit
+            description: "Customer credit limit"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: stock_movements
+        description: "Stock movement transactions"
+        columns:
+          - name: movement_id
+            description: "Unique identifier for the movement"
+          - name: product_id
+            description: "Reference to product"
+          - name: movement_date
+            description: "Date of the movement"
+          - name: movement_type
+            description: "Type of movement (IN, OUT, ADJUSTMENT)"
+          - name: quantity
+            description: "Quantity moved"
+          - name: reference
+            description: "Reference document (order number, etc.)"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+
+  - name: shopify
+    database: "{{ var('fivetran_database') }}"
+    schema: shopify
+    description: "Raw data from Shopify e-commerce platform synced via Fivetran"
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: _fivetran_synced
+    
+    tables:
+      - name: orders
+        description: "Orders from Shopify"
+        columns:
+          - name: id
+            description: "Unique identifier for the order"
+            tests:
+              - unique
+              - not_null
+          - name: order_number
+            description: "Order number displayed to customer"
+          - name: customer_id
+            description: "Reference to customer"
+          - name: created_at
+            description: "When the order was created"
+          - name: processed_at
+            description: "When the order was processed"
+          - name: financial_status
+            description: "Payment status of the order"
+          - name: fulfillment_status
+            description: "Fulfillment status"
+          - name: total_price
+            description: "Total price including tax and shipping"
+          - name: subtotal_price
+            description: "Subtotal excluding tax and shipping"
+          - name: total_tax
+            description: "Total tax amount"
+          - name: total_shipping_price_set
+            description: "Total shipping cost"
+          - name: currency
+            description: "Currency code"
+          - name: cancelled_at
+            description: "When the order was cancelled (if applicable)"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: order_lines
+        description: "Line items for Shopify orders"
+        columns:
+          - name: id
+            description: "Unique identifier for the line item"
+          - name: order_id
+            description: "Reference to parent order"
+          - name: product_id
+            description: "Reference to product"
+          - name: variant_id
+            description: "Reference to product variant"
+          - name: title
+            description: "Product title"
+          - name: variant_title
+            description: "Variant title"
+          - name: sku
+            description: "Stock keeping unit"
+          - name: quantity
+            description: "Quantity ordered"
+          - name: price
+            description: "Unit price"
+          - name: total_discount
+            description: "Total discount on the line"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+            
+      - name: customers
+        description: "Customer data from Shopify"
+        columns:
+          - name: id
+            description: "Unique identifier for the customer"
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: "Customer email address"
+          - name: first_name
+            description: "Customer first name"
+          - name: last_name
+            description: "Customer last name"
+          - name: phone
+            description: "Customer phone number"
+          - name: created_at
+            description: "When the customer was created"
+          - name: updated_at
+            description: "When the customer was last updated"
+          - name: orders_count
+            description: "Total number of orders"
+          - name: total_spent
+            description: "Total amount spent by customer"
+          - name: state
+            description: "Customer state (enabled, disabled, etc.)"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: products
+        description: "Product catalog from Shopify"
+        columns:
+          - name: id
+            description: "Unique identifier for the product"
+            tests:
+              - unique
+              - not_null
+          - name: title
+            description: "Product title"
+          - name: vendor
+            description: "Product vendor"
+          - name: product_type
+            description: "Product type/category"
+          - name: handle
+            description: "URL handle for the product"
+          - name: created_at
+            description: "When the product was created"
+          - name: updated_at
+            description: "When the product was last updated"
+          - name: published_at
+            description: "When the product was published"
+          - name: status
+            description: "Product status (active, archived, draft)"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+          - name: _fivetran_deleted
+            description: "Soft delete flag from Fivetran"
+            
+      - name: product_variants
+        description: "Product variants from Shopify"
+        columns:
+          - name: id
+            description: "Unique identifier for the variant"
+          - name: product_id
+            description: "Reference to parent product"
+          - name: title
+            description: "Variant title"
+          - name: sku
+            description: "Stock keeping unit"
+          - name: price
+            description: "Variant price"
+          - name: compare_at_price
+            description: "Compare at price for sales"
+          - name: inventory_quantity
+            description: "Available inventory"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"
+            
+      - name: transactions
+        description: "Financial transactions for orders"
+        columns:
+          - name: id
+            description: "Unique identifier for the transaction"
+          - name: order_id
+            description: "Reference to order"
+          - name: kind
+            description: "Transaction type (sale, refund, etc.)"
+          - name: status
+            description: "Transaction status"
+          - name: amount
+            description: "Transaction amount"
+          - name: currency
+            description: "Currency code"
+          - name: created_at
+            description: "When the transaction was created"
+          - name: gateway
+            description: "Payment gateway used"
+          - name: _fivetran_synced
+            description: "Timestamp when record was synced by Fivetran"

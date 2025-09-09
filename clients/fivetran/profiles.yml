@@ -1,0 +1,29 @@
+fivetran_azure:
+  outputs:
+    dev:
+      type: sqlserver
+      driver: 'ODBC Driver 18 for SQL Server'
+      server: your-server.database.windows.net
+      port: 1433
+      database: your_database_name
+      schema: dbt_dev
+      authentication: sql
+      username: your_username
+      password: your_password
+      encrypt: true
+      trust_cert: false
+    
+    prod:
+      type: sqlserver
+      driver: 'ODBC Driver 18 for SQL Server'
+      server: your-server.database.windows.net
+      port: 1433
+      database: your_database_name
+      schema: dbt_prod
+      authentication: sql
+      username: your_username
+      password: your_password
+      encrypt: true
+      trust_cert: false
+      
+  target: dev

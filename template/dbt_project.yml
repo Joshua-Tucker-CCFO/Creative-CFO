@@ -1,0 +1,37 @@
+name: 'dbt_template'
+version: '1.0.0'
+config-version: 2
+
+# This is a template dbt_project.yml for standardized client projects
+# Copy and customize this for each client in the clients/ directory
+
+profile: 'template_profile'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["data"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  dbt_template:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+      +indexes: []
+
+vars:
+  # Common variables that should be customized per client
+  client_name: 'template'
+  database_name: 'template_database'

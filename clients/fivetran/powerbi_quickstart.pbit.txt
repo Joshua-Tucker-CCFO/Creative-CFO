@@ -1,0 +1,98 @@
+# Power BI Quick Start Template
+
+## FASTEST SETUP (5 minutes):
+
+### Step 1: Connect to Data
+1. Open Power BI Desktop
+2. Click "Get Data" → "SQL Server"
+3. Enter:
+   - Server: oldschoolbi.database.windows.net
+   - Database: OldSchool-Dev-DB
+   - Click "OK"
+4. Select "Database" authentication
+5. Enter credentials:
+   - Username: CloudSA251754e9@oldschoolbi
+   - Password: *"P{"p50WN4l$A;1qAZZ
+6. Check these 3 tables:
+   - ☑ dbt_jtucker.powerbi_sales_fact
+   - ☑ dbt_jtucker.powerbi_customer_dim
+   - ☑ dbt_jtucker.powerbi_product_dim
+7. Click "Load"
+
+### Step 2: Create Relationships (30 seconds)
+1. Go to Model view (left sidebar, 3rd icon)
+2. Drag customer_id from sales_fact to customer_id in customer_dim
+3. Save
+
+### Step 3: Quick Dashboard (2 minutes)
+Go to Report view and add:
+
+**Row 1: KPI Cards**
+- Insert → Visual → Card
+  - Drag total_amount to Fields
+  - Copy card 3 times
+  - Change fields to: order_number (Count Distinct), customer_id (Count Distinct), tax_amount
+
+**Row 2: Sales Trend**
+- Insert → Visual → Line Chart
+  - X-axis: order_date (from sales_fact)
+  - Y-axis: total_amount
+
+**Row 3: Top Customers**
+- Insert → Visual → Bar Chart
+  - Y-axis: customer_name (from customer_dim)
+  - X-axis: total_amount (from sales_fact)
+  - Add filter: Top N → Top 10 by total_amount
+
+**Row 4: Sales by Location**
+- Insert → Visual → Pie Chart
+  - Legend: location
+  - Values: total_amount
+
+### Step 4: Add Slicers
+- Add Date slicer: order_date
+- Add Dropdown: location
+- Add Dropdown: sales_representative
+
+## COMPLETE IN 5 MINUTES!
+
+---
+
+## Sample DAX Measures (Copy & Paste)
+
+Right-click on powerbi_sales_fact → New Measure:
+
+```
+Total Sales = SUM(powerbi_sales_fact[total_amount])
+Total Orders = COUNTROWS(powerbi_sales_fact)
+Avg Order Value = DIVIDE([Total Sales], [Total Orders])
+Total Tax = SUM(powerbi_sales_fact[tax_amount])
+Net Sales = SUM(powerbi_sales_fact[subtotal_amount])
+Customer Count = DISTINCTCOUNT(powerbi_sales_fact[customer_id])
+
+Sales MTD = 
+CALCULATE(
+    [Total Sales],
+    DATESMTD(powerbi_sales_fact[order_date])
+)
+
+Sales YTD = 
+CALCULATE(
+    [Total Sales],
+    DATESYTD(powerbi_sales_fact[order_date])
+)
+
+Top Customer Sales = 
+CALCULATE(
+    [Total Sales],
+    TOPN(1, ALL(powerbi_customer_dim[customer_name]), [Total Sales])
+)
+```
+
+## Format Numbers
+Select each measure → Modeling tab → Format → Currency
+
+## Save As
+File → Save As → "Cin7 Sales Dashboard.pbix"
+
+You now have a working Power BI dashboard!
