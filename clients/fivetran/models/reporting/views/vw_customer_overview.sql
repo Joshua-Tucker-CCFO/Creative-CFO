@@ -6,6 +6,9 @@
 }}
 
 -- Optimized customer overview for Power BI dashboards
+-- Data source: int_unified_customers (unified across Cin7, Xero, Shopify)
+-- Refresh frequency: Daily via dbt Cloud
+-- Performance note: Filters to active customers only for optimal query performance
 select
     -- Customer identifiers
     unique_customer_key,

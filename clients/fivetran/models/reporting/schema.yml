@@ -3,6 +3,11 @@ version: 2
 models:
   - name: vw_customer_overview
     description: "Customer overview dashboard optimized for Power BI reporting"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "customer_lifetime_value >= 0"
+      - dbt_utils.expression_is_true:
+          expression: "total_orders_count >= 0"
     columns:
       - name: unique_customer_key
         description: "Unique identifier across all source systems"
@@ -63,7 +68,12 @@ models:
         description: "Total inventory value at retail"
 
   - name: vw_business_summary
-    description: "Executive business summary dashboard"
+    description: "Executive business summary dashboard with cross-functional KPIs"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "total_revenue >= 0"
+      - dbt_utils.expression_is_true:
+          expression: "total_orders >= 0"
     columns:
       - name: total_orders
         description: "Total orders in reporting period"

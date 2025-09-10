@@ -1,0 +1,24 @@
+# dbt Project Variables Configuration
+# These variables can be overridden in dbt_project.yml or via --vars
+
+# Reporting Configuration
+reporting_period_days: 365  # Default reporting period in days
+sales_history_start_date: '2020-01-01'  # Historical data cutoff
+
+# Inventory Thresholds  
+low_stock_threshold: 10      # Items with stock <= this are "Low Stock"
+normal_stock_threshold: 50   # Items with stock <= this are "Normal Stock"
+
+# Customer Segmentation (for future enhancement)
+new_customer_max_orders: 1
+regular_customer_max_orders: 5
+valued_customer_max_orders: 20
+
+# Value Tiers (for future enhancement)
+low_value_max: 100
+medium_value_max: 500  
+high_value_max: 2000
+
+# Data Quality Settings
+enable_data_quality_tests: true
+strict_validation_mode: false

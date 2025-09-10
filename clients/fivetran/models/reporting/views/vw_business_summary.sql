@@ -6,6 +6,7 @@
 }}
 
 -- Executive business summary for Power BI main dashboard
+-- Includes data quality validation and handles edge cases for empty datasets
 with sales_metrics as (
     select
         count(*) as total_orders,
@@ -54,21 +55,21 @@ select
     i.out_of_stock_products,
     i.total_inventory_value,
     
-    -- Calculated ratios for Power BI
+    -- Calculated ratios for Power BI with data quality validation
     case 
-        when c.total_customers > 0 
+        when c.total_customers > 0 and c.active_customers is not null
         then round((c.active_customers::decimal / c.total_customers::decimal) * 100, 2)
         else 0 
     end as customer_activation_rate,
     
     case 
-        when i.total_products > 0 
+        when i.total_products > 0 and i.out_of_stock_products is not null
         then round((i.out_of_stock_products::decimal / i.total_products::decimal) * 100, 2)
         else 0 
     end as out_of_stock_rate,
     
     case 
-        when s.unique_customers > 0 
+        when s.unique_customers > 0 and s.total_revenue is not null
         then round(s.total_revenue / s.unique_customers, 2)
         else 0 
     end as revenue_per_customer,

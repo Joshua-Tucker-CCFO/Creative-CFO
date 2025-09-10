@@ -6,6 +6,9 @@
 }}
 
 -- Inventory status dashboard for Power BI
+-- Data source: int_unified_products (aggregated from Cin7 Core primarily)
+-- Business rules: Configurable stock thresholds, automated margin calculations
+-- Performance: Filters out invalid products for optimal query performance
 select
     -- Product identifiers
     product_id,
@@ -27,11 +30,11 @@ select
         else 0 
     end as gross_margin_percent,
     
-    -- Stock status categories for Power BI
+    -- Stock status categories for Power BI (configurable thresholds)
     case 
         when coalesce(stock_on_hand, 0) = 0 then 'Out of Stock'
-        when coalesce(stock_on_hand, 0) <= 10 then 'Low Stock'
-        when coalesce(stock_on_hand, 0) <= 50 then 'Normal Stock'
+        when coalesce(stock_on_hand, 0) <= {{ var('low_stock_threshold', 10) }} then 'Low Stock'
+        when coalesce(stock_on_hand, 0) <= {{ var('normal_stock_threshold', 50) }} then 'Normal Stock'
         else 'High Stock'
     end as stock_status,
     

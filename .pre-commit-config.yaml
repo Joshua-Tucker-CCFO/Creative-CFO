@@ -3,10 +3,11 @@ repos:
     hooks:
       - id: claude-sql-review
         name: Claude SQL Review
+        description: "Automated code review of SQL files using Anthropic Claude AI"
         entry: python scripts/claude_review.py
         language: python
         files: \.sql$
-        additional_dependencies: ['anthropic>=0.3.0']
+        additional_dependencies: ['anthropic>=0.25.0,<1.0.0']
         
   - repo: https://github.com/dbt-labs/dbt-pre-commit-hooks
     rev: v0.1.1
