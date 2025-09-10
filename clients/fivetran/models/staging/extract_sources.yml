@@ -1,0 +1,227 @@
+version: 2
+
+# Extract layer sources - data processed by stored procedures from Fivetran raw tables
+sources:
+  # Cin7 Core extract layer
+  - name: extract_cin7
+    database: "{{ var('fivetran_database') }}"
+    schema: extract
+    description: "Extracted Cin7 Core data processed by stored procedures"
+    freshness:
+      warn_after: {count: 6, period: hour}
+      error_after: {count: 12, period: hour}
+    loaded_at_field: extracted_at
+    
+    tables:
+      - name: cin7_customers
+        description: "Extracted customer data from Cin7 Core"
+        columns:
+          - name: customer_id
+            description: "Unique identifier for the customer"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "Customer name"
+          - name: email
+            description: "Customer email"
+          - name: phone
+            description: "Customer phone"
+          - name: billing_address
+            description: "Billing address"
+          - name: shipping_address
+            description: "Shipping address"
+          - name: credit_limit
+            description: "Customer credit limit"
+          - name: extracted_at
+            description: "When data was extracted into this layer"
+
+      - name: cin7_products
+        description: "Extracted product data from Cin7 Core"
+        columns:
+          - name: product_id
+            description: "Unique identifier for the product"
+            tests:
+              - unique
+              - not_null
+          - name: sku
+            description: "Stock keeping unit"
+          - name: name
+            description: "Product name"
+          - name: description
+            description: "Product description"
+          - name: category
+            description: "Product category"
+          - name: cost_price
+            description: "Cost price of the product"
+          - name: retail_price
+            description: "Retail selling price"
+          - name: stock_on_hand
+            description: "Current stock quantity"
+          - name: extracted_at
+            description: "When data was extracted into this layer"
+
+      - name: cin7_sales_orders
+        description: "Extracted sales orders from Cin7 Core"
+        columns:
+          - name: sales_order_id
+            description: "Unique identifier for the sales order"
+            tests:
+              - unique
+              - not_null
+          - name: order_number
+            description: "Sales order number"
+          - name: customer_id
+            description: "Reference to customer"
+          - name: order_date
+            description: "Date of the order"
+          - name: status
+            description: "Order status"
+          - name: total_amount
+            description: "Total order amount including tax"
+          - name: subtotal
+            description: "Order subtotal excluding tax"
+          - name: tax_amount
+            description: "Total tax amount"
+          - name: currency
+            description: "Currency code"
+          - name: extracted_at
+            description: "When data was extracted into this layer"
+
+  # Xero extract layer  
+  - name: extract_xero
+    database: "{{ var('fivetran_database') }}"
+    schema: extract
+    description: "Extracted Xero data processed by stored procedures"
+    freshness:
+      warn_after: {count: 6, period: hour}
+      error_after: {count: 12, period: hour}
+    loaded_at_field: extracted_at
+    
+    tables:
+      - name: xero_invoices
+        description: "Extracted invoice data from Xero"
+        columns:
+          - name: invoice_id
+            description: "Unique identifier for the invoice"
+            tests:
+              - unique
+              - not_null
+          - name: invoice_number
+            description: "Invoice number as displayed in Xero"
+          - name: contact_id
+            description: "Reference to the contact (customer/supplier)"
+          - name: type
+            description: "Invoice type (ACCPAY, ACCREC, etc.)"
+          - name: status
+            description: "Invoice status (DRAFT, SUBMITTED, AUTHORISED, PAID, etc.)"
+          - name: date
+            description: "Invoice date"
+          - name: due_date
+            description: "Payment due date"
+          - name: total
+            description: "Total amount including tax"
+          - name: sub_total
+            description: "Total excluding tax"
+          - name: total_tax
+            description: "Total tax amount"
+          - name: currency_code
+            description: "Currency code (e.g., USD, GBP)"
+          - name: extracted_at
+            description: "When data was extracted into this layer"
+
+      - name: xero_contacts
+        description: "Extracted contact data from Xero"
+        columns:
+          - name: contact_id
+            description: "Unique identifier for the contact"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "Contact name"
+          - name: email_address
+            description: "Primary email address"
+          - name: contact_status
+            description: "Status of the contact (ACTIVE, ARCHIVED)"
+          - name: is_customer
+            description: "Flag indicating if contact is a customer"
+          - name: is_supplier
+            description: "Flag indicating if contact is a supplier"
+          - name: extracted_at
+            description: "When data was extracted into this layer"
+
+  # Shopify extract layer
+  - name: extract_shopify
+    database: "{{ var('fivetran_database') }}"
+    schema: extract
+    description: "Extracted Shopify data processed by stored procedures"
+    freshness:
+      warn_after: {count: 6, period: hour}
+      error_after: {count: 12, period: hour}
+    loaded_at_field: extracted_at
+    
+    tables:
+      - name: shopify_orders
+        description: "Extracted order data from Shopify"
+        columns:
+          - name: id
+            description: "Unique identifier for the order"
+            tests:
+              - unique
+              - not_null
+          - name: order_number
+            description: "Order number displayed to customer"
+          - name: customer_id
+            description: "Reference to customer"
+          - name: created_at
+            description: "When the order was created"
+          - name: processed_at
+            description: "When the order was processed"
+          - name: financial_status
+            description: "Payment status of the order"
+          - name: fulfillment_status
+            description: "Fulfillment status"
+          - name: total_price
+            description: "Total price including tax and shipping"
+          - name: subtotal_price
+            description: "Subtotal excluding tax and shipping"
+          - name: total_tax
+            description: "Total tax amount"
+          - name: total_shipping_price_set
+            description: "Total shipping cost"
+          - name: currency
+            description: "Currency code"
+          - name: cancelled_at
+            description: "When the order was cancelled (if applicable)"
+          - name: extracted_at
+            description: "When data was extracted into this layer"
+
+      - name: shopify_customers
+        description: "Extracted customer data from Shopify"
+        columns:
+          - name: id
+            description: "Unique identifier for the customer"
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: "Customer email address"
+          - name: first_name
+            description: "Customer first name"
+          - name: last_name
+            description: "Customer last name"
+          - name: phone
+            description: "Customer phone number"
+          - name: created_at
+            description: "When the customer was created"
+          - name: updated_at
+            description: "When the customer was last updated"
+          - name: orders_count
+            description: "Total number of orders"
+          - name: total_spent
+            description: "Total amount spent by customer"
+          - name: state
+            description: "Customer state (enabled, disabled, etc.)"
+          - name: extracted_at
+            description: "When data was extracted into this layer"

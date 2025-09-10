@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: vw_customer_overview
+    description: "Customer overview dashboard optimized for Power BI reporting"
+    columns:
+      - name: unique_customer_key
+        description: "Unique identifier across all source systems"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Customer display name"
+      - name: email
+        description: "Primary email address"
+      - name: customer_segment
+        description: "Customer segment based on order history"
+      - name: value_tier
+        description: "Customer value tier based on lifetime value"
+      - name: customer_lifetime_value
+        description: "Total customer lifetime value"
+      - name: total_orders_count
+        description: "Total number of orders placed"
+
+  - name: vw_sales_performance  
+    description: "Sales performance metrics for Power BI dashboards"
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+      - name: order_date
+        description: "Date of the order"
+        tests:
+          - not_null
+      - name: total_amount
+        description: "Total order amount"
+        tests:
+          - not_null
+      - name: order_size_category
+        description: "Order size classification for analysis"
+      - name: source_system
+        description: "Source system (Cin7, Xero, Shopify)"
+      - name: data_quality_flag
+        description: "Data quality indicator"
+
+  - name: vw_inventory_status
+    description: "Inventory status dashboard for Power BI"
+    columns:
+      - name: product_id
+        description: "Unique product identifier"
+        tests:
+          - not_null
+      - name: sku
+        description: "Stock keeping unit"
+      - name: current_stock
+        description: "Current stock on hand"
+      - name: stock_status
+        description: "Stock level classification"
+      - name: gross_margin_percent
+        description: "Gross margin percentage"
+      - name: inventory_value_cost
+        description: "Total inventory value at cost"
+      - name: inventory_value_retail
+        description: "Total inventory value at retail"
+
+  - name: vw_business_summary
+    description: "Executive business summary dashboard"
+    columns:
+      - name: total_orders
+        description: "Total orders in reporting period"
+      - name: total_revenue
+        description: "Total revenue in reporting period"  
+      - name: avg_order_value
+        description: "Average order value"
+      - name: customer_activation_rate
+        description: "Percentage of customers with orders"
+      - name: out_of_stock_rate
+        description: "Percentage of products out of stock"
+      - name: revenue_per_customer
+        description: "Average revenue per customer"
