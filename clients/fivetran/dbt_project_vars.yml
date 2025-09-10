@@ -1,24 +1,31 @@
 # dbt Project Variables Configuration
 # These variables can be overridden in dbt_project.yml or via --vars
+# All variables include default values for safety and consistency
 
 # Reporting Configuration
-reporting_period_days: 365  # Default reporting period in days
-sales_history_start_date: '2020-01-01'  # Historical data cutoff
+reporting_period_days: 365  # Default reporting period in days (valid range: 30-1095)
+sales_history_start_date: '2020-01-01'  # Historical data cutoff (format: YYYY-MM-DD)
 
-# Inventory Thresholds  
-low_stock_threshold: 10      # Items with stock <= this are "Low Stock"
-normal_stock_threshold: 50   # Items with stock <= this are "Normal Stock"
+# Inventory Thresholds - Used in vw_inventory_status for stock categorization
+low_stock_threshold: 10      # Items with stock <= this are "Low Stock" (default: 10, min: 1)
+normal_stock_threshold: 50   # Items with stock <= this are "Normal Stock" (default: 50, min: 11)
 
-# Customer Segmentation (for future enhancement)
-new_customer_max_orders: 1
-regular_customer_max_orders: 5
-valued_customer_max_orders: 20
+# Customer Segmentation Thresholds - Used in customer classification logic
+new_customer_max_orders: 1      # Max orders for "New Customer" segment
+regular_customer_max_orders: 5  # Max orders for "Regular Customer" segment  
+valued_customer_max_orders: 20  # Max orders for "Valued Customer" segment
 
-# Value Tiers (for future enhancement)
-low_value_max: 100
-medium_value_max: 500  
-high_value_max: 2000
+# Customer Value Tiers - Used in customer value classification
+low_value_max: 100     # Max lifetime value for "Low Value" tier
+medium_value_max: 500  # Max lifetime value for "Medium Value" tier
+high_value_max: 2000   # Max lifetime value for "High Value" tier
 
-# Data Quality Settings
-enable_data_quality_tests: true
-strict_validation_mode: false
+# Data Quality Control Settings
+enable_data_quality_tests: true   # Enables comprehensive dbt_utils validation tests
+strict_validation_mode: false     # When true, applies stricter validation rules and fails on warnings
+
+# Variable Validation Notes:
+# - All thresholds must be positive integers
+# - Date formats must follow YYYY-MM-DD pattern  
+# - Boolean settings accept true/false only
+# - Override these in dbt_project.yml or via --vars for environment-specific values

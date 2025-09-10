@@ -59,3 +59,6 @@ from {{ ref('int_unified_products') }}
 -- Only include active products
 where product_name is not null
 and sku is not null
+
+-- Consistent ordering for reliable reporting
+order by inventory_value_retail desc, current_stock desc

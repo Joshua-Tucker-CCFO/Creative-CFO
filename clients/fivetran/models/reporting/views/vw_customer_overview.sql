@@ -45,3 +45,6 @@ from {{ ref('int_unified_customers') }}
 -- Optimization: Only include active customers for reporting
 where email is not null
 and customer_name is not null
+
+-- Consistent ordering for reliable reporting
+order by customer_lifetime_value desc, total_orders_count desc

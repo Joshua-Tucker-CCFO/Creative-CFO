@@ -41,11 +41,11 @@ models:
         tests:
           - not_null
       - name: order_size_category
-        description: "Order size classification for analysis"
+        description: "Order size classification: Small (<$100), Medium ($100-$500), Large ($500-$2000), Enterprise (>$2000)"
       - name: source_system
         description: "Source system (Cin7, Xero, Shopify)"
       - name: data_quality_flag
-        description: "Data quality indicator"
+        description: "Data quality indicator: CLEAN (validated), WARNING (minor issues), ERROR (significant issues)"
 
   - name: vw_inventory_status
     description: "Inventory status dashboard for Power BI"
@@ -82,8 +82,8 @@ models:
       - name: avg_order_value
         description: "Average order value"
       - name: customer_activation_rate
-        description: "Percentage of customers with orders"
+        description: "Percentage of total customers who have placed at least one order (calculated as active_customers/total_customers * 100)"
       - name: out_of_stock_rate
-        description: "Percentage of products out of stock"
+        description: "Percentage of total products with zero stock (calculated as out_of_stock_products/total_products * 100)"
       - name: revenue_per_customer
         description: "Average revenue per customer"
