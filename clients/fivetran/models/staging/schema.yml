@@ -34,8 +34,9 @@ sources:
           - name: customer_id
             tests:
               - relationships:
-                  to: ref('stg_customers')
-                  field: customer_id
+                  arguments:
+                    to: ref('stg_customers')
+                    field: customer_id
           - name: order_date
           - name: total_amount
           - name: status

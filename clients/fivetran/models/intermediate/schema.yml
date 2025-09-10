@@ -8,7 +8,8 @@ models:
         description: "System where the transaction originated"
         tests:
           - accepted_values:
-              values: ['Xero', 'Cin7', 'Shopify']
+              arguments:
+                values: ['Xero', 'Cin7', 'Shopify']
       - name: transaction_id
         description: "Unique identifier for the transaction within source system"
         tests:

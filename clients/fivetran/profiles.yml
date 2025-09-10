@@ -1,29 +1,19 @@
 fivetran_azure:
+  target: dev
   outputs:
     dev:
-      type: sqlserver
+      type: synapse
       driver: 'ODBC Driver 18 for SQL Server'
-      server: your-server.database.windows.net
+      server: oldschoolbi.database.windows.net
       port: 1433
-      database: your_database_name
+      database: OldSchool-Dev-DB
       schema: dbt_dev
       authentication: sql
-      username: your_username
-      password: your_password
+      user: "{{ env_var('DBT_SYNAPSE_USER') }}"
+      password: "{{ env_var('DBT_SYNAPSE_PASSWORD') }}"
       encrypt: true
-      trust_cert: false
-    
-    prod:
-      type: sqlserver
-      driver: 'ODBC Driver 18 for SQL Server'
-      server: your-server.database.windows.net
-      port: 1433
-      database: your_database_name
-      schema: dbt_prod
-      authentication: sql
-      username: your_username
-      password: your_password
-      encrypt: true
-      trust_cert: false
-      
-  target: dev
+      trust_cert: true
+      retries: 1
+      login_timeout: 0
+      query_timeout: 0
+      threads: 4

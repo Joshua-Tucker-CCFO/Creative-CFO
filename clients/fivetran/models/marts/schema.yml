@@ -13,7 +13,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Xero', 'Cin7', 'Shopify']
+              arguments:
+                values: ['Xero', 'Cin7', 'Shopify']
       - name: currency_code
         description: "Currency of transactions"
       - name: sale_year
