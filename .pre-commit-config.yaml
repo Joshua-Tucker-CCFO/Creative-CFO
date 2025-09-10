@@ -1,0 +1,17 @@
+repos:
+  - repo: local
+    hooks:
+      - id: claude-sql-review
+        name: Claude SQL Review
+        entry: python scripts/claude_review.py
+        language: python
+        files: \.sql$
+        additional_dependencies: ['anthropic>=0.3.0']
+        
+  - repo: https://github.com/dbt-labs/dbt-pre-commit-hooks
+    rev: v0.1.1
+    hooks:
+      - id: dbt-compile
+      - id: dbt-docs-generate
+      - id: check-model-has-description
+        files: models/.*\.yml$
