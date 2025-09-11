@@ -1,6 +1,73 @@
 version: 2
 
 models:
+  - name: dim_date
+    description: "Comprehensive date dimension for time-based analytics with business calendar, fiscal periods, and holiday tracking"
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "calendar_year between 2020 and 2027"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "fiscal_quarter between 1 and 4"
+    columns:
+      - name: date_key
+        description: "Primary key in YYYYMMDD format"
+        tests:
+          - unique
+          - not_null
+      - name: calendar_date
+        description: "Standard calendar date"
+        tests:
+          - not_null
+      - name: calendar_year
+        description: "Calendar year (2020-2027)"
+      - name: fiscal_year
+        description: "Fiscal year (April to March) for Pack Leader alignment"
+      - name: is_weekend
+        description: "Flag indicating weekend (1=weekend, 0=weekday)"
+      - name: is_holiday
+        description: "Flag indicating South African public holiday"
+      - name: day_name
+        description: "Full day name (Monday, Tuesday, etc.)"
+      - name: month_name
+        description: "Full month name (January, February, etc.)"
+
+  - name: dim_sales_rep
+    description: "Sales representative dimension unified across all source systems with territory and performance tracking"
+    tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "tenure_months >= 0 or tenure_months is null"
+    columns:
+      - name: sales_rep_key
+        description: "Primary surrogate key for sales representative"
+        tests:
+          - unique
+          - not_null
+      - name: sales_rep_name
+        description: "Full name of sales representative"
+        tests:
+          - not_null
+      - name: sales_rep_email
+        description: "Primary email address"
+      - name: sales_rep_code
+        description: "Unique code/ID within source system"
+      - name: source_system
+        description: "Source system (Cin7, Xero, Shopify, Manual)"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Cin7', 'Xero', 'Shopify', 'Manual']
+      - name: territory
+        description: "Sales territory assignment"
+      - name: sales_team
+        description: "Team classification based on territory"
+      - name: is_active
+        description: "Current employment status (1=active, 0=inactive)"
+      - name: rep_category
+        description: "Sales rep classification (Commission Sales, Salary Sales, Digital Sales, Unassigned)"
+
   - name: fct_daily_sales
     description: "Daily sales fact table optimized for Power BI reporting"
     columns:
