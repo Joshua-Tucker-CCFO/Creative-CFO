@@ -33,4 +33,4 @@ vars:
   fivetran_schema: 'fivetran'
 
 dbt-cloud:
-  project-id: 70471823501225
+  project-id: 70471823470849
