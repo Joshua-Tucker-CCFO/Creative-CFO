@@ -26,7 +26,6 @@ models:
     marts:
       +materialized: table
       +schema: marts
-      +indexes: []
 
 vars:
   fivetran_database: 'OldSchool-Dev-DB'
