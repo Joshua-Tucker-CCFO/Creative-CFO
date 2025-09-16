@@ -8,7 +8,7 @@ with source as (
     select * from {{ source('cin7core', 'product') }}
 ),
 
-renamed as (
+transformed as (
     select
         id as product_id,
         name as product_name,
@@ -24,4 +24,4 @@ renamed as (
     where _fivetran_deleted is null or _fivetran_deleted = 0
 )
 
-select * from renamed
+select * from transformed

@@ -1,14 +1,6 @@
 {{
     config(
-        materialized='table',
-        indexes=[
-            {'columns': ['date_key'], 'type': 'clustered'},
-            {'columns': ['calendar_year', 'calendar_month']},
-            {'columns': ['fiscal_year', 'fiscal_quarter']},
-            {'columns': ['day_of_week']},
-            {'columns': ['is_weekend']},
-            {'columns': ['is_holiday']}
-        ]
+        materialized='table'
     )
 }}
 
@@ -108,4 +100,3 @@ date_attributes as (
 )
 
 select * from date_attributes
-order by calendar_date

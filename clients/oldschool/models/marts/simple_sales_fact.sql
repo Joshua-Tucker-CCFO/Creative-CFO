@@ -9,7 +9,7 @@
 WITH cin7_sales AS (
     SELECT 
         id as sale_id,
-        CAST(created_date AS DATE) as sale_date,
+        CAST(date AS DATE) as sale_date,
         customer_id,
         location as location_name,
         reference as order_reference,
@@ -23,7 +23,7 @@ WITH cin7_sales AS (
         COALESCE(total - tax, 0) as subtotal_amount,
         
         -- Metadata
-        created_date,
+        date as created_date,
         completed_date,
         _fivetran_synced
     FROM [{{ var('fivetran_database') }}].cin7core.sale

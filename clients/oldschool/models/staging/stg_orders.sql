@@ -8,7 +8,7 @@ with source as (
     select * from {{ source('fivetran_source', 'orders') }}
 ),
 
-renamed as (
+transformed as (
     select
         order_id,
         customer_id,
@@ -25,4 +25,4 @@ renamed as (
     where _fivetran_deleted is null or _fivetran_deleted = 0
 )
 
-select * from renamed
+select * from transformed

@@ -12,7 +12,7 @@ with source_data as (
 transformed as (
     select
         -- IDs
-        product_id,
+        id as product_id,
         sku,
         
         -- Product details

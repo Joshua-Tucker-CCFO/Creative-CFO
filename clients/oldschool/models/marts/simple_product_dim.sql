@@ -46,7 +46,6 @@ SELECT
     never_diminishing,
     sellable,
     purchasable,
-    deprecated,
     notes,
     
     -- Metadata
@@ -57,4 +56,3 @@ SELECT
     
 FROM [{{ var('fivetran_database') }}].cin7core.product
 WHERE (_fivetran_deleted = 0 OR _fivetran_deleted IS NULL)
-  AND (deprecated = 0 OR deprecated IS NULL)

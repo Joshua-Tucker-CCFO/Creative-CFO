@@ -11,7 +11,7 @@ with source_data as (
 transformed as (
     select
         -- IDs
-        line_id,
+        id as line_id,
         sales_order_id,
         product_id,
         

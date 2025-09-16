@@ -35,7 +35,6 @@ SELECT
     
     -- Status flags
     on_credit_hold,
-    inactive,
     
     -- Metadata
     created_date,
@@ -45,4 +44,3 @@ SELECT
     
 FROM [{{ var('fivetran_database') }}].cin7core.customer
 WHERE (_fivetran_deleted = 0 OR _fivetran_deleted IS NULL)
-  AND (inactive = 0 OR inactive IS NULL)

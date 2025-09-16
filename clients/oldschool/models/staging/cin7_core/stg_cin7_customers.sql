@@ -12,7 +12,7 @@ with source_data as (
 transformed as (
     select
         -- IDs
-        customer_id,
+        id as customer_id,
         
         -- Customer details
         name as customer_name,

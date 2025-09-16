@@ -5,16 +5,13 @@ models:
     description: "Sales fact table for Power BI"
     config:
       materialized: table
-      indexes: []
       
   - name: dim_customers_v2
     description: "Customer dimension for Power BI"
     config:
       materialized: table
-      indexes: []
       
   - name: dim_products_v2
-    description: "Product dimension for Power BI"  
+    description: "Product dimension for Power BI"
     config:
       materialized: table
-      indexes: []
