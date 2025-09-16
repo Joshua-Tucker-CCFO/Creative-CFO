@@ -5,7 +5,7 @@
 }}
 
 with source_data as (
-    select * from {{ source('cin7_core', 'sales_order_lines') }}
+    select * from {{ source('cin7core', 'sale_order_line') }}
 ),
 
 transformed as (

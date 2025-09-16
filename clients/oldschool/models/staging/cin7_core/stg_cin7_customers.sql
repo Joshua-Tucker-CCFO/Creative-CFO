@@ -5,7 +5,7 @@
 }}
 
 with source_data as (
-    select * from {{ source('cin7_core', 'customers') }}
+    select * from {{ source('cin7core', 'customer') }}
     where _fivetran_deleted is null or _fivetran_deleted = false
 ),
 

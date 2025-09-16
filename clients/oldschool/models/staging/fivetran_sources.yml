@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: xero
     database: "{{ var('fivetran_database') }}"
-    schema: xero
+    schema: old_school_xero
     description: "Raw data from Xero accounting system synced via Fivetran"
     freshness:
       warn_after: {count: 24, period: hour}
@@ -123,9 +123,9 @@ sources:
           - name: _fivetran_synced
             description: "Timestamp when record was synced by Fivetran"
 
-  - name: cin7_core
+  - name: cin7core
     database: "{{ var('fivetran_database') }}"
-    schema: cin7_core
+    schema: cin7core
     description: "Raw data from Cin7 Core inventory management system synced via Fivetran"
     freshness:
       warn_after: {count: 24, period: hour}
@@ -133,7 +133,7 @@ sources:
     loaded_at_field: _fivetran_synced
     
     tables:
-      - name: sales_orders
+      - name: sale
         description: "Sales orders from Cin7 Core"
         columns:
           - name: sales_order_id
@@ -162,7 +162,7 @@ sources:
           - name: _fivetran_deleted
             description: "Soft delete flag from Fivetran"
             
-      - name: sales_order_lines
+      - name: sale_order_line
         description: "Line items for sales orders"
         columns:
           - name: line_id
@@ -182,7 +182,7 @@ sources:
           - name: _fivetran_synced
             description: "Timestamp when record was synced by Fivetran"
             
-      - name: products
+      - name: product
         description: "Product catalog from Cin7 Core"
         columns:
           - name: product_id
@@ -209,7 +209,7 @@ sources:
           - name: _fivetran_deleted
             description: "Soft delete flag from Fivetran"
             
-      - name: customers
+      - name: customer
         description: "Customer data from Cin7 Core"
         columns:
           - name: customer_id
@@ -234,7 +234,7 @@ sources:
           - name: _fivetran_deleted
             description: "Soft delete flag from Fivetran"
             
-      - name: stock_movements
+      - name: product_movement
         description: "Stock movement transactions"
         columns:
           - name: movement_id
@@ -254,7 +254,7 @@ sources:
 
   - name: shopify
     database: "{{ var('fivetran_database') }}"
-    schema: shopify
+    schema: oldschool_shopify_azure_integration
     description: "Raw data from Shopify e-commerce platform synced via Fivetran"
     freshness:
       warn_after: {count: 24, period: hour}
