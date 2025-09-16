@@ -11,13 +11,11 @@ with source_data as (
 transformed as (
     select
         -- IDs
-        id as line_id,
         sale_id as sales_order_id,
         product_id,
 
         -- Basic line details
         quantity,
-        price as unit_price,
 
         -- Metadata
         _fivetran_synced as last_synced_at
