@@ -5,19 +5,17 @@
 }}
 
 with source as (
-    select * from {{ source('fivetran_source', 'orders') }}
+    select * from {{ source('cin7core', 'sale') }}
 ),
 
 transformed as (
     select
-        order_id,
+        id as order_id,
         customer_id,
-        order_date,
-        total_amount,
         status,
         _fivetran_synced,
         _fivetran_deleted,
-        case 
+        case
             when _fivetran_deleted = 1 then 'deleted'
             else 'active'
         end as record_status
