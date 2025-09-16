@@ -1,4 +1,4 @@
-fivetran_azure:
+oldschool:
   target: dev
   outputs:
     dev:
