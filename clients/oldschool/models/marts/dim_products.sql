@@ -1,12 +1,6 @@
 {{
     config(
-        materialized='table',
-        indexes=[
-            {'columns': ['unique_product_key'], 'type': 'clustered'},
-            {'columns': ['sku']},
-            {'columns': ['source_system']},
-            {'columns': ['product_category']}
-        ]
+        materialized='table'
     )
 }}
 

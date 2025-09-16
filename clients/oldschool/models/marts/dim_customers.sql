@@ -1,8 +1,6 @@
 {{
     config(
         materialized='table',
-        indexes=[
-            {'columns': ['unique_customer_key'], 'type': 'clustered'},
             {'columns': ['email']},
             {'columns': ['source_system']}
         ]

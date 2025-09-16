@@ -1,8 +1,6 @@
 {{
     config(
         materialized='table',
-        indexes=[
-            {'columns': ['sales_rep_key'], 'type': 'clustered'},
             {'columns': ['sales_rep_email']},
             {'columns': ['sales_rep_code']},
             {'columns': ['is_active']},

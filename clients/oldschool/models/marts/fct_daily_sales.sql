@@ -1,8 +1,6 @@
 {{
     config(
         materialized='table',
-        indexes=[
-            {'columns': ['sale_date'], 'type': 'clustered'},
             {'columns': ['source_system', 'sale_date']},
             {'columns': ['currency_code', 'sale_date']}
         ]
