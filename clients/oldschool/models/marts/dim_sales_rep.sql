@@ -1,12 +1,6 @@
 {{
     config(
         materialized='table',
-            {'columns': ['sales_rep_email']},
-            {'columns': ['sales_rep_code']},
-            {'columns': ['is_active']},
-            {'columns': ['sales_team']},
-            {'columns': ['territory']}
-        ]
     )
 }}
 

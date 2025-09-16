@@ -1,9 +1,6 @@
 {{
     config(
         materialized='table',
-            {'columns': ['source_system', 'sale_date']},
-            {'columns': ['currency_code', 'sale_date']}
-        ]
     )
 }}
 

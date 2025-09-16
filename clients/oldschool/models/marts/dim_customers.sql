@@ -1,9 +1,6 @@
 {{
     config(
         materialized='table',
-            {'columns': ['email']},
-            {'columns': ['source_system']}
-        ]
     )
 }}
 
