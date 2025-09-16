@@ -5,18 +5,17 @@
 }}
 
 with source as (
-    select * from {{ source('fivetran_source', 'customers') }}
+    select * from {{ source('cin7core', 'customer') }}
 ),
 
 renamed as (
     select
-        customer_id,
-        customer_name,
-        email,
-        created_at,
+        id as customer_id,
+        name as customer_name,
+        status,
         _fivetran_synced,
         _fivetran_deleted,
-        case 
+        case
             when _fivetran_deleted = 1 then 'deleted'
             else 'active'
         end as record_status

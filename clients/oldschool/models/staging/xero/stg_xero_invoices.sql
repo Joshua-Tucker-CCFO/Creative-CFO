@@ -6,7 +6,7 @@
 
 with source_data as (
     select * from {{ source('xero', 'invoices') }}
-    where _fivetran_deleted is null or _fivetran_deleted = false
+    where _fivetran_deleted is null or _fivetran_deleted = 0
 ),
 
 transformed as (

@@ -5,15 +5,15 @@
 }}
 
 with source as (
-    select * from {{ source('fivetran_source', 'products') }}
+    select * from {{ source('cin7core', 'product') }}
 ),
 
 renamed as (
     select
-        product_id,
-        product_name,
+        id as product_id,
+        name as product_name,
         category,
-        price,
+        sale_price as price,
         _fivetran_synced,
         _fivetran_deleted,
         case 
