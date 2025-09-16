@@ -1,14 +1,14 @@
-name: 'fivetran_azure_project'
+name: 'oldschool_project'
 version: '1.0.0'
 config-version: 2
 
-profile: 'fivetran_azure'
+profile: 'oldschool'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 seed-paths: ["data"]
-macro-paths: ["macros"]
+macro-paths: ["../../shared/macros", "macros"]
 snapshot-paths: ["snapshots"]
 
 clean-targets:
@@ -16,7 +16,7 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  fivetran_azure_project:
+  oldschool_project:
     staging:
       +materialized: view
       +schema: staging
@@ -33,4 +33,4 @@ vars:
   fivetran_schema: 'fivetran'
 
 dbt-cloud:
-  project-id: 70471823470849
+  project-id: 70471823501225
