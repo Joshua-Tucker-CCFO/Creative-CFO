@@ -32,9 +32,12 @@ models:
     reporting:
       +materialized: view
       +schema: reporting
-  # Disable any example models if they exist
+  # Azure SQL Database compatible example models
   example:
-    +enabled: false
+    +enabled: true
+    +materialized: table
+    +post_hook: []
+    +pre_hook: []
 
 vars:
   fivetran_database: 'OldSchool-Dev-DB'
