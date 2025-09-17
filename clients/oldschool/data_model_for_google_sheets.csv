@@ -1,0 +1,40 @@
+Layer,Schema,Table Name,Type,Source System,Purpose,Key Columns,Power BI Ready,Status
+STAGING,staging,stg_cin7_customers,View,Cin7 Core,Customer master data,"customer_id, customer_name, status, last_synced_at",No,Active
+STAGING,staging,stg_cin7_products,View,Cin7 Core,Product catalog,"product_id, product_name, status, last_synced_at",No,Active
+STAGING,staging,stg_cin7_sales_orders,View,Cin7 Core,Sales order headers,"sales_order_id, customer_id, order_status, last_synced_at",No,Active
+STAGING,staging,stg_cin7_sales_order_lines,View,Cin7 Core,Order line items,"sales_order_id, product_id, quantity, unit_price",No,Active
+STAGING,staging,stg_cin7_simple,View,Cin7 Core,Simple test model,"All columns from sale table",No,Testing
+STAGING,staging,stg_shopify_customers,View,Shopify,Online customers,"customer_id, email, first_name, last_name",No,Placeholder
+STAGING,staging,stg_shopify_orders,View,Shopify,Online orders,"order_id, customer_id, total_price, order_date",No,Placeholder
+STAGING,staging,stg_shopify_order_lines,View,Shopify,Order details,"order_id, product_id, quantity, price",No,Placeholder
+STAGING,staging,stg_shopify_products,View,Shopify,Product listings,"product_id, title, product_type, vendor",No,Placeholder
+STAGING,staging,stg_xero_contacts,View,Xero,Business contacts,"contact_id, contact_name, is_customer, is_supplier",No,Placeholder
+STAGING,staging,stg_xero_invoices,View,Xero,Invoice headers,"invoice_id, contact_id, total, status, invoice_date",No,Placeholder
+STAGING,staging,stg_xero_line_items,View,Xero,Invoice lines,"invoice_id, item_code, quantity, unit_amount",No,Placeholder
+STAGING,staging,stg_xero_items,View,Xero,Item master,"item_id, item_code, item_name, sales_unit_price",No,Placeholder
+STAGING,staging,stg_customers,View,Cin7 Core,Generic customer staging,"customer_id, customer_name, status, record_status",No,Active
+STAGING,staging,stg_orders,View,Cin7 Core,Generic order staging,"order_id, customer_id, status, record_status",No,Active
+STAGING,staging,stg_products,View,Cin7 Core,Generic product staging,"product_id, product_name, status, record_status",No,Active
+INTERMEDIATE,intermediate,int_unified_customers,View,All Systems,Combines customers from all systems,"customer_id, customer_name, source_system, email, phone",No,Active
+INTERMEDIATE,intermediate,int_unified_products,View,All Systems,Unified product catalog,"product_id, product_name, source_system, category, status",No,Active
+INTERMEDIATE,intermediate,int_sales_transactions,View,All Systems,All sales across channels,"transaction_id, customer_id, transaction_date, source",No,Active
+INTERMEDIATE,intermediate,int_customer_orders,View,All Systems,Customer order summary,"customer_id, order_count, total_revenue, first_order_date",No,Active
+MARTS,marts,dim_customers_v2,Table,All Systems,Customer master dimension,"customer_id, customer_name, customer_status, customer_segment",Yes,Active
+MARTS,marts,dim_products_v2,Table,All Systems,Product master dimension,"product_id, product_name, product_category, product_status",Yes,Active
+MARTS,marts,dim_date,Table,Generated,Date/calendar dimension,"date_key, calendar_date, fiscal_year, fiscal_quarter, month_name",Yes,Active
+MARTS,marts,dim_sales_rep,Table,Manual,Sales representative dimension,"rep_id, rep_name, region, team",Yes,Planned
+MARTS,marts,dim_customers,Table,Cin7 Core,Legacy customer dimension,"source_customer_id, customer_name, customer_type",Yes,Legacy
+MARTS,marts,dim_products,Table,Cin7 Core,Legacy product dimension,"source_product_id, product_name, product_category",Yes,Legacy
+MARTS,marts,fct_sales,Table,All Systems,Detailed sales transactions,"sale_id, customer_id, product_id, sale_date, quantity, revenue",Yes,Active
+MARTS,marts,fct_daily_sales,Table,All Systems,Daily sales aggregates,"date_key, total_revenue, order_count, customer_count",Yes,Active
+MARTS,marts,simple_customer_dim,Table,Cin7 Core,Basic customer dimension for quick start,"customer_id, customer_name, customer_status",Yes,Active
+MARTS,marts,simple_product_dim,Table,Cin7 Core,Basic product dimension for quick start,"product_id, product_name",Yes,Active
+MARTS,marts,simple_sales_fact,Table,Cin7 Core,Simplified sales facts for quick start,"sale_id, customer_id, sale_status",Yes,Active
+MARTS,marts,customer_analytics,Table,All Systems,Customer behavior analytics,"customer_id, ltv, purchase_frequency, churn_risk",Yes,Planned
+MARTS,marts,daily_revenue,Table,All Systems,Revenue tracking by day,"date, revenue, orders, avg_order_value",Yes,Planned
+MARTS_SIMPLE,marts,fct_sales_simple,Table,Cin7 Core,Ultra-simplified sales fact,"sale_id, customer_id, sale_status",Yes,Active
+REPORTING,reporting,vw_sales_performance,View,Marts,Sales KPIs and trends,"date, revenue, growth_rate, top_products",Yes,Active
+REPORTING,reporting,vw_customer_overview,View,Marts,Customer analytics view,"customer_segment, lifetime_value, churn_rate",Yes,Active
+REPORTING,reporting,vw_inventory_status,View,Marts,Stock levels and movement,"product_id, stock_on_hand, turnover_rate",Yes,Active
+REPORTING,reporting,vw_business_summary,View,Marts,Executive dashboard metrics,"kpi_name, kpi_value, trend",Yes,Active
+TEST,staging,test_connection,View,Cin7 Core,Database connectivity test,"customer_id, customer_name, status",No,Testing

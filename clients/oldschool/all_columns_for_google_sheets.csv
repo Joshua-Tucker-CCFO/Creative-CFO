@@ -1,0 +1,138 @@
+Table Name,Layer,Column Name,Data Type,Description,Source,Is Key,Is Nullable,Business Purpose
+stg_customers,STAGING,customer_id,VARCHAR,Unique customer identifier,cin7core.customer.id,PK,No,Customer identification
+stg_customers,STAGING,customer_name,VARCHAR,Customer business name,cin7core.customer.name,No,Yes,Customer display
+stg_customers,STAGING,status,VARCHAR,Customer status,cin7core.customer.status,No,Yes,Customer state tracking
+stg_customers,STAGING,_fivetran_synced,TIMESTAMP,Last sync timestamp,Fivetran metadata,No,Yes,Data freshness tracking
+stg_customers,STAGING,_fivetran_deleted,INTEGER,Deletion flag,Fivetran metadata,No,Yes,Soft delete tracking
+stg_customers,STAGING,record_status,VARCHAR,Calculated status,Derived field,No,No,Clean status indicator
+stg_products,STAGING,product_id,VARCHAR,Unique product identifier,cin7core.product.id,PK,No,Product identification
+stg_products,STAGING,product_name,VARCHAR,Product display name,cin7core.product.name,No,Yes,Product display
+stg_products,STAGING,_fivetran_synced,TIMESTAMP,Last sync timestamp,Fivetran metadata,No,Yes,Data freshness tracking
+stg_products,STAGING,_fivetran_deleted,INTEGER,Deletion flag,Fivetran metadata,No,Yes,Soft delete tracking
+stg_products,STAGING,record_status,VARCHAR,Calculated status,Derived field,No,No,Clean status indicator
+stg_orders,STAGING,order_id,VARCHAR,Unique order identifier,cin7core.sale.id,PK,No,Order identification
+stg_orders,STAGING,customer_id,VARCHAR,Associated customer,cin7core.sale.customer_id,FK,Yes,Customer relationship
+stg_orders,STAGING,status,VARCHAR,Order status,cin7core.sale.status,No,Yes,Order state tracking
+stg_orders,STAGING,_fivetran_synced,TIMESTAMP,Last sync timestamp,Fivetran metadata,No,Yes,Data freshness tracking
+stg_orders,STAGING,_fivetran_deleted,INTEGER,Deletion flag,Fivetran metadata,No,Yes,Soft delete tracking
+stg_orders,STAGING,record_status,VARCHAR,Calculated status,Derived field,No,No,Clean status indicator
+stg_cin7_customers,STAGING,customer_id,VARCHAR,Customer identifier,cin7core.customer.id,PK,No,Customer identification
+stg_cin7_customers,STAGING,customer_name,VARCHAR,Customer name,cin7core.customer.name,No,Yes,Customer display
+stg_cin7_customers,STAGING,status,VARCHAR,Customer status,cin7core.customer.status,No,Yes,Customer state
+stg_cin7_customers,STAGING,last_synced_at,TIMESTAMP,Sync timestamp,_fivetran_synced,No,Yes,Data freshness
+stg_cin7_products,STAGING,product_id,VARCHAR,Product identifier,cin7core.product.id,PK,No,Product identification
+stg_cin7_products,STAGING,product_name,VARCHAR,Product name,cin7core.product.name,No,Yes,Product display
+stg_cin7_products,STAGING,status,VARCHAR,Product status,cin7core.product.status,No,Yes,Product state
+stg_cin7_products,STAGING,last_synced_at,TIMESTAMP,Sync timestamp,_fivetran_synced,No,Yes,Data freshness
+stg_cin7_sales_orders,STAGING,sales_order_id,VARCHAR,Sales order ID,cin7core.sale.id,PK,No,Order identification
+stg_cin7_sales_orders,STAGING,customer_id,VARCHAR,Customer reference,cin7core.sale.customer_id,FK,Yes,Customer relationship
+stg_cin7_sales_orders,STAGING,order_status,VARCHAR,Order status,cin7core.sale.status,No,Yes,Order processing state
+stg_cin7_sales_orders,STAGING,last_synced_at,TIMESTAMP,Sync timestamp,_fivetran_synced,No,Yes,Data freshness
+stg_cin7_sales_order_lines,STAGING,sales_order_id,VARCHAR,Order reference,cin7core.sale_order_line.sale_id,FK,No,Order relationship
+stg_cin7_sales_order_lines,STAGING,product_id,VARCHAR,Product reference,cin7core.sale_order_line.product_id,FK,Yes,Product relationship
+stg_cin7_sales_order_lines,STAGING,quantity,DECIMAL(10 2),Quantity ordered,cin7core.sale_order_line.quantity,No,Yes,Order quantity
+stg_cin7_sales_order_lines,STAGING,unit_price,DECIMAL(15 2),Price per unit,cin7core.sale_order_line.unit_price,No,Yes,Unit pricing
+stg_cin7_sales_order_lines,STAGING,last_synced_at,TIMESTAMP,Sync timestamp,_fivetran_synced,No,Yes,Data freshness
+stg_cin7_simple,STAGING,*,VARIOUS,All sale columns,cin7core.sale.*,No,Yes,Raw data access
+stg_cin7_simple,STAGING,processed_at,TIMESTAMP,Processing time,CURRENT_TIMESTAMP,No,No,dbt processing tracking
+int_unified_customers,INTERMEDIATE,customer_id,VARCHAR,Unified customer ID,Multiple sources,PK,No,Cross-system customer ID
+int_unified_customers,INTERMEDIATE,customer_name,VARCHAR,Unified customer name,Multiple sources,No,Yes,Cross-system customer display
+int_unified_customers,INTERMEDIATE,source_system,VARCHAR,Origin system,Calculated,No,No,Data lineage tracking
+int_unified_customers,INTERMEDIATE,email,VARCHAR,Customer email,Source systems,No,Yes,Customer contact
+int_unified_customers,INTERMEDIATE,phone,VARCHAR,Customer phone,Source systems,No,Yes,Customer contact
+int_unified_customers,INTERMEDIATE,customer_type,VARCHAR,Customer classification,Business logic,No,Yes,Customer segmentation
+int_unified_products,INTERMEDIATE,product_id,VARCHAR,Unified product ID,Multiple sources,PK,No,Cross-system product ID
+int_unified_products,INTERMEDIATE,product_name,VARCHAR,Unified product name,Multiple sources,No,Yes,Cross-system product display
+int_unified_products,INTERMEDIATE,source_system,VARCHAR,Origin system,Calculated,No,No,Data lineage tracking
+int_unified_products,INTERMEDIATE,category,VARCHAR,Product category,Source systems,No,Yes,Product classification
+int_unified_products,INTERMEDIATE,status,VARCHAR,Product status,Unified logic,No,Yes,Product state
+int_sales_transactions,INTERMEDIATE,transaction_id,VARCHAR,Transaction ID,Source order/invoice IDs,PK,No,Transaction identification
+int_sales_transactions,INTERMEDIATE,customer_id,VARCHAR,Customer reference,Source transactions,FK,Yes,Customer relationship
+int_sales_transactions,INTERMEDIATE,transaction_date,DATE,Transaction date,Source systems,No,Yes,Transaction timing
+int_sales_transactions,INTERMEDIATE,source_system,VARCHAR,Origin system,Calculated,No,No,Data lineage tracking
+int_sales_transactions,INTERMEDIATE,amount,DECIMAL(15 2),Transaction amount,Source systems,No,Yes,Transaction value
+int_customer_orders,INTERMEDIATE,customer_id,VARCHAR,Customer ID,From transactions,PK,No,Customer identification
+int_customer_orders,INTERMEDIATE,order_count,INTEGER,Number of orders,Aggregated count,No,No,Customer activity volume
+int_customer_orders,INTERMEDIATE,total_revenue,DECIMAL(15 2),Total customer revenue,Sum of orders,No,Yes,Customer lifetime value
+int_customer_orders,INTERMEDIATE,first_order_date,DATE,First order date,MIN(order_date),No,Yes,Customer acquisition date
+int_customer_orders,INTERMEDIATE,last_order_date,DATE,Most recent order,MAX(order_date),No,Yes,Customer recency
+dim_customers_v2,MARTS,customer_id,VARCHAR(50),Customer identifier,cin7core.customer.id,PK,No,Customer master key
+dim_customers_v2,MARTS,customer_name,VARCHAR(200),Customer business name,cin7core.customer.name,No,Yes,Customer display name
+dim_customers_v2,MARTS,customer_status,VARCHAR(20),Customer status,cin7core.customer.status,No,Yes,Customer state
+dim_customers_v2,MARTS,customer_segment,VARCHAR(50),Customer segmentation,Business logic,No,Yes,Customer classification
+dim_customers_v2,MARTS,created_at,TIMESTAMP,Record creation,CURRENT_TIMESTAMP,No,No,Audit trail
+dim_customers_v2,MARTS,updated_at,TIMESTAMP,Last update,CURRENT_TIMESTAMP,No,No,Audit trail
+dim_products_v2,MARTS,product_id,VARCHAR(50),Product identifier,cin7core.product.id,PK,No,Product master key
+dim_products_v2,MARTS,product_name,VARCHAR(200),Product display name,cin7core.product.name,No,Yes,Product display name
+dim_products_v2,MARTS,product_category,VARCHAR(100),Product category,Business logic,No,Yes,Product classification
+dim_products_v2,MARTS,product_status,VARCHAR(20),Product status,cin7core.product.status,No,Yes,Product state
+dim_products_v2,MARTS,created_at,TIMESTAMP,Record creation,CURRENT_TIMESTAMP,No,No,Audit trail
+dim_products_v2,MARTS,updated_at,TIMESTAMP,Last update,CURRENT_TIMESTAMP,No,No,Audit trail
+dim_date,MARTS,date_key,VARCHAR(8),Date key YYYYMMDD,Calculated,PK,No,Date dimension key
+dim_date,MARTS,calendar_date,DATE,Calendar date,Generated,No,No,Actual date value
+dim_date,MARTS,calendar_year,INTEGER,Calendar year,YEAR(date),No,No,Year for grouping
+dim_date,MARTS,calendar_month,INTEGER,Month number,MONTH(date),No,No,Month for grouping
+dim_date,MARTS,calendar_day,INTEGER,Day of month,DAY(date),No,No,Day for grouping
+dim_date,MARTS,calendar_quarter,INTEGER,Quarter number,DATEPART(quarter),No,No,Quarter for grouping
+dim_date,MARTS,week_of_year,INTEGER,Week number,DATEPART(week),No,No,Week for grouping
+dim_date,MARTS,day_of_year,INTEGER,Day of year,DATEPART(dayofyear),No,No,Day sequence in year
+dim_date,MARTS,day_of_week,INTEGER,Day of week,DATEPART(weekday),No,No,Weekday identification
+dim_date,MARTS,month_year,VARCHAR(20),Month-year display,FORMAT(date),No,No,Formatted month-year
+dim_date,MARTS,year_month,VARCHAR(7),YYYY-MM format,FORMAT(date),No,No,Sortable month identifier
+dim_date,MARTS,day_name,VARCHAR(10),Day name,FORMAT(date),No,No,Weekday name
+dim_date,MARTS,month_name,VARCHAR(15),Month name,FORMAT(date),No,No,Month name
+dim_date,MARTS,fiscal_year,INTEGER,Fiscal year,Calculated,No,No,Fiscal year (Apr-Mar)
+dim_date,MARTS,fiscal_quarter,INTEGER,Fiscal quarter,Calculated,No,No,Fiscal quarter
+dim_date,MARTS,is_weekend,INTEGER,Weekend flag,Calculated,No,No,Weekend indicator
+dim_date,MARTS,is_weekday,INTEGER,Weekday flag,Calculated,No,No,Weekday indicator
+dim_date,MARTS,is_holiday,INTEGER,Holiday flag,Calculated,No,No,SA holiday indicator
+dim_date,MARTS,is_last_30_days,INTEGER,Last 30 days flag,Calculated,No,No,Recent period indicator
+dim_date,MARTS,is_last_90_days,INTEGER,Last 90 days flag,Calculated,No,No,Recent period indicator
+dim_date,MARTS,is_current_year,INTEGER,Current year flag,Calculated,No,No,Current year indicator
+dim_date,MARTS,created_at,TIMESTAMP,Creation timestamp,GETDATE(),No,No,Audit trail
+fct_sales,MARTS,sale_id,VARCHAR(50),Sale identifier,cin7core.sale.id,PK,No,Transaction key
+fct_sales,MARTS,customer_id,VARCHAR(50),Customer reference,Sales order,FK,Yes,Customer relationship
+fct_sales,MARTS,product_id,VARCHAR(50),Product reference,Order lines,FK,Yes,Product relationship
+fct_sales,MARTS,sale_date,DATE,Sale date,Sales order,No,Yes,Transaction timing
+fct_sales,MARTS,quantity,DECIMAL(10 2),Quantity sold,Order lines,No,Yes,Transaction quantity
+fct_sales,MARTS,unit_price,DECIMAL(15 2),Unit price,Order lines,No,Yes,Unit pricing
+fct_sales,MARTS,line_total,DECIMAL(15 2),Line total,Calculated,No,Yes,Line value
+fct_sales,MARTS,sale_status,VARCHAR(20),Sale status,Sales order,No,Yes,Transaction state
+fct_sales,MARTS,created_at,TIMESTAMP,Creation time,CURRENT_TIMESTAMP,No,No,Audit trail
+simple_customer_dim,MARTS,customer_id,VARCHAR(50),Customer ID,cin7core.customer.id,PK,No,Simple customer key
+simple_customer_dim,MARTS,customer_name,VARCHAR(200),Customer name,cin7core.customer.name,No,Yes,Simple customer display
+simple_customer_dim,MARTS,customer_status,VARCHAR(20),Status,cin7core.customer.status,No,Yes,Simple status
+simple_customer_dim,MARTS,_fivetran_synced,TIMESTAMP,Sync time,Fivetran metadata,No,Yes,Data freshness
+simple_customer_dim,MARTS,dbt_processed_at,TIMESTAMP,Processing time,CURRENT_TIMESTAMP,No,No,dbt processing time
+simple_product_dim,MARTS,product_id,VARCHAR(50),Product ID,cin7core.product.id,PK,No,Simple product key
+simple_product_dim,MARTS,product_name,VARCHAR(200),Product name,cin7core.product.name,No,Yes,Simple product display
+simple_product_dim,MARTS,_fivetran_synced,TIMESTAMP,Sync time,Fivetran metadata,No,Yes,Data freshness
+simple_product_dim,MARTS,dbt_processed_at,TIMESTAMP,Processing time,CURRENT_TIMESTAMP,No,No,dbt processing time
+simple_sales_fact,MARTS,sale_id,VARCHAR(50),Sale ID,cin7core.sale.id,PK,No,Simple transaction key
+simple_sales_fact,MARTS,customer_id,VARCHAR(50),Customer reference,cin7core.sale.customer_id,FK,Yes,Simple customer link
+simple_sales_fact,MARTS,sale_status,VARCHAR(20),Sale status,cin7core.sale.status,No,Yes,Simple transaction state
+simple_sales_fact,MARTS,_fivetran_synced,TIMESTAMP,Sync time,Fivetran metadata,No,Yes,Data freshness
+simple_sales_fact,MARTS,dbt_processed_at,TIMESTAMP,Processing time,CURRENT_TIMESTAMP,No,No,dbt processing time
+fct_sales_simple,MARTS_SIMPLE,sale_id,VARCHAR(50),Sale ID,cin7core.sale.id,PK,No,Ultra-simple transaction key
+fct_sales_simple,MARTS_SIMPLE,customer_id,VARCHAR(50),Customer reference,cin7core.sale.customer_id,FK,Yes,Ultra-simple customer link
+fct_sales_simple,MARTS_SIMPLE,sale_status,VARCHAR(20),Sale status,cin7core.sale.status,No,Yes,Ultra-simple state
+fct_sales_simple,MARTS_SIMPLE,_fivetran_synced,TIMESTAMP,Sync time,Fivetran metadata,No,Yes,Data freshness
+fct_sales_simple,MARTS_SIMPLE,dbt_processed_at,TIMESTAMP,Processing time,CURRENT_TIMESTAMP,No,No,dbt processing time
+vw_sales_performance,REPORTING,date,DATE,Performance date,fct_sales,No,No,Reporting period
+vw_sales_performance,REPORTING,revenue,DECIMAL(15 2),Daily revenue,SUM(line_total),No,Yes,Revenue KPI
+vw_sales_performance,REPORTING,growth_rate,DECIMAL(5 2),Revenue growth %,Calculated,No,Yes,Growth KPI
+vw_sales_performance,REPORTING,top_products,VARCHAR(500),Best-selling products,Aggregated,No,Yes,Product performance
+vw_customer_overview,REPORTING,customer_segment,VARCHAR(50),Customer segment,dim_customers,No,Yes,Segmentation analysis
+vw_customer_overview,REPORTING,customer_count,INTEGER,Number of customers,COUNT(*),No,No,Volume metric
+vw_customer_overview,REPORTING,lifetime_value,DECIMAL(15 2),Average LTV,Calculated,No,Yes,Value metric
+vw_customer_overview,REPORTING,churn_rate,DECIMAL(5 2),Churn percentage,Calculated,No,Yes,Retention metric
+vw_inventory_status,REPORTING,product_id,VARCHAR(50),Product ID,dim_products,FK,No,Product reference
+vw_inventory_status,REPORTING,product_name,VARCHAR(200),Product name,dim_products,No,Yes,Product display
+vw_inventory_status,REPORTING,stock_on_hand,INTEGER,Current inventory,Business logic,No,Yes,Inventory level
+vw_inventory_status,REPORTING,turnover_rate,DECIMAL(5 2),Inventory turnover,Calculated,No,Yes,Inventory velocity
+vw_business_summary,REPORTING,kpi_name,VARCHAR(100),KPI identifier,Static list,No,No,KPI reference
+vw_business_summary,REPORTING,kpi_value,DECIMAL(15 2),Current value,Calculated,No,Yes,KPI metric
+vw_business_summary,REPORTING,trend,VARCHAR(20),Trend direction,Calculated,No,Yes,Trend indicator
+test_connection,TEST,customer_id,VARCHAR(50),Customer ID,cin7core.customer.id (TOP 10),No,No,Test data
+test_connection,TEST,customer_name,VARCHAR(200),Customer name,cin7core.customer.name (TOP 10),No,Yes,Test data
+test_connection,TEST,status,VARCHAR(20),Status,cin7core.customer.status (TOP 10),No,Yes,Test data
